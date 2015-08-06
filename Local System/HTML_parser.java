@@ -5,7 +5,13 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;  
 import org.jsoup.nodes.Document;  
 import org.jsoup.nodes.Element;  
-import org.jsoup.select.Elements;  
+import org.jsoup.select.Elements;
+
+class Company_Data{
+	int Company_ID;
+	String Company_url;
+	
+}
    
 public class HTML_parser{  
     public static void main(String[] args) throws IOException {  
@@ -28,6 +34,7 @@ public class HTML_parser{
         	tmp_string = e.text().split(" ");
         	for(int i=0; i<tmp_string.length; i++)
             System.out.println(tmp_string[i]);
+        	//디버깅
         	System.out.println(e);
         }
         
