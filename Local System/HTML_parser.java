@@ -18,6 +18,7 @@ class Company_Data{
 	int Company_ID,published,deadline_date,Occupations;
 	//Company_ID : 문서번호, published : 계시일, deadline_data: 마감일, Occupations : 직종
 	String Company_url,Job_name,in_Jobs;
+	//Company_url : 주소, Job_name : 회사명, in_Jobs : 상세내용
 	Company_Data() { };
 	
 	//디버깅용 
@@ -58,9 +59,21 @@ class Use_Saramin_API extends Company_Data{
 
 class Use_Jobkorea extends Company_Data{
 	Use_Jobkorea(){}
+	int i = 0;
+	//잡코리아용 구문해석기
 	Use_Jobkorea(String[] Company){
 		this.Job_name = Company[0]; //기업명
-		
+		this.in_Jobs = Company[1] + Company[2] + Company[3] + Company[4] + Company[5]; //채용명
+		for(int i = 0;i< Company.length;i++){
+			//특정 문자열에 요일이 있을 경우 15을 추가하여 년월일 형태로 정수형 변수에 추가
+			if(Company[i].contains("(월)")||Company[i].contains("(화)")||Company[i].contains("(수)")||Company[i].contains("(목)")
+					||Company[i].contains("(금)")||Company[i].contains("(토)")||Company[i].contains("(일)")){
+				this.deadline_date = Integer.parseInt("15"+Company[i].substring(0,2)+Company[i].substring(3,5));
+			}
+		}
+	}
+	void Set_Jobkorea_url(String url){
+		this.Company_url = url;
 	}
 }
    
@@ -68,7 +81,7 @@ public class HTML_parser{
     public static void main(String[] args) throws IOException {  
    
     	//사람인 API의 XML구문 추출
-       Document doc = Jsoup.connect("http://api.saramin.co.kr/job-search?published=2015-08-07&start=2&count=1000").get();
+       Document SaramIN = Jsoup.connect("http://api.saramin.co.kr/job-search?published=2015-08-07&start=2&count=1000").get();
        Document job_korea = Jsoup.connect("http://m.jobkorea.co.kr/Starter/NI_List.asp").get();
        
         //구문 해석을 위한 임시 변수정의
@@ -78,10 +91,11 @@ public class HTML_parser{
         //ArrayList을 통한 동적인 저장공간 확보
         ArrayList<Use_Saramin_API> Company_list = new ArrayList<Use_Saramin_API>();
         ArrayList<Use_Jobkorea> Company_list_2 = new ArrayList<Use_Jobkorea>();
+        ArrayList<String> tmp_Array = new ArrayList<String>();
         
        //XML의 데이터 추출 : job 
         //API에서는 job 태그로 각 기업정보를 저장하고 있음
-        Elements titles = doc.select("job");  
+        Elements titles = SaramIN.select("job");  
         //추출한 데이의 전체 내용 출력
         for(Element e: titles){  
             System.out.println("text: " +e.text());  
@@ -100,13 +114,32 @@ public class HTML_parser{
         titles = job_korea.select("ul.boothEvenOdd li");
         for(Element e: titles){
         	tmp_string = e.text().split(" ");
-        	for(int i=0; i<tmp_string.length; i++)
-        		System.out.println(i+" text: " +tmp_string[i]);
+        	Company_list_2.add(new Use_Jobkorea(tmp_string));
+        	/* 잡코리아 사이트에서 채용정보의 CSS 디자인 구문을 참고하여 boothEvenOdd 클라스의 구문이 있는 전체내용 저장
+        	 * 
+        	 * System.out.println("job korea : "+e.text());
+        	 * 	for(int i = 0; i<tmp_string.length;i++)
+        	 * 		System.out.println(tmp_string[i]);
+        	 */
         }
-        Elements links = job_korea.select("ul.boothEvenOdd a[href]");  
-        for(Element l: links){  
-            System.out.println("link: " +l.attr("abs:href"));  
-        } 
-   
+        
+        Elements links = job_korea.select("ul.boothEvenOdd a[href]");
+        
+        for(Element l: links){ 
+        	//잡코리아 모바일 페이지를 분석후 기업 사이트의 조건에 해당하는 내용을 찾아 이를 리스트에 저장함
+     	   if(l.attr("abs:href").contains("GI_No")&& !(l.attr("abs:href").contains("Page=1"))){
+     		   /*System.out.println("link: " +l.attr("abs:href"));
+     		    * 디버깅 용*/
+     		   tmp_Array.add(l.attr("abs:href"));
+     	   }
+         }
+        
+        for(int i=0; i<Company_list_2.size()&&i<tmp_Array.size() ; i++){
+        		Company_list_2.get(i).Set_Jobkorea_url(tmp_Array.get(i));
+        }
+       
+    	for(int i=0; i<Company_list_2.size(); i++){
+    		System.out.println(Company_list_2.get(i));
+    	}
     }  
 }  
