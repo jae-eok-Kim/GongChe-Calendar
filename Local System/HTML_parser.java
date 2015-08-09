@@ -4,7 +4,6 @@
 	 * */
 import java.io.IOException;  
 
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;  
 import org.jsoup.nodes.Document;  
 import org.jsoup.nodes.Element;  
@@ -29,7 +28,7 @@ class Company_Data{
 	//in_Jobs 의 구문을 분석하여 직종분류작업
 	void Find_job(String in_job){
 		if(in_job.contains("자바")||in_job.contains("서버")||in_job.contains("C")||in_job.contains("java")||in_job.contains("IT")) this.Occupations = IT;
-		else if(in_job.contains("사무직")||in_job.contains("회계")||in_job.contains("경리")||in_job.contains("분석")) this.Occupations = Office;
+		else if(in_job.contains("사무직")||in_job.contains("회계")||in_job.contains("경리")||in_job.contains("분석")||in_job.contains("유통")||in_job.contains("디자인")) this.Occupations = Office;
 		else if(in_job.contains("생산직")||in_job.contains("공장")||in_job.contains("건설")) this.Occupations = Blue_collar;
 		else Occupations = Etc;
 	}
@@ -141,5 +140,9 @@ public class HTML_parser{
     	for(int i=0; i<Company_list_2.size(); i++){
     		System.out.println(Company_list_2.get(i));
     	}
-    }  
+    	
+    	Send_DB Send_DB = new Send_DB();
+    	
+    	Send_DB.SendDB();
+    	}  
 }  
