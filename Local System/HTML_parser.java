@@ -2,7 +2,9 @@
 	 * 목적 : 사람인 잡코리아 등의 사이트 내에서 구문을 해석하고 이를 분류한뒤 데이터베이스에 저장
 	 * 필요한 외부 라이브러리 : 자바 HTML 파서 jsoup (http://jsoup.org/)
 	 * */
-import java.io.IOException;  
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import org.jsoup.Jsoup;  
 import org.jsoup.nodes.Document;  
@@ -16,14 +18,15 @@ class Company_Data{
 	
 	int Company_ID,published,deadline_date,Occupations;
 	//Company_ID : 문서번호, published : 계시일, deadline_data: 마감일, Occupations : 직종
-	String Company_url,Job_name,in_Jobs;
+	String Company_url,Job_name,in_Jobs,string_published,string_deadline_date;
 	//Company_url : 주소, Job_name : 회사명, in_Jobs : 상세내용
 	Company_Data() { };
 	
 	//디버깅용 
 	public String toString(){
 		return "ID : " + this.Company_ID + " 기업명 : " + this.Job_name+" 주소 : " + this.Company_url + 
-				" 직종 : "+ this.Put_job(this.Occupations) +" 채용명 : "+ this.in_Jobs + " 계시일 : " + this.published + " 마감일 : " + this.deadline_date;
+				" 직종 : "+ this.Put_job(this.Occupations) +" 채용명 : "+ this.in_Jobs + " 계시일 : "
+				+ this.string_published + " 마감일 :" + this.string_deadline_date;
 	}
 	//in_Jobs 의 구문을 분석하여 직종분류작업
 	void Find_job(String in_job){
@@ -48,17 +51,29 @@ class Use_Saramin_API extends Company_Data{
 	Use_Saramin_API(String[] Company){
 		this.Company_ID = Integer.parseInt(Company[0]); //개시물 ID추출
 		this.Company_url = Company[1]; //기업주소
+		this.string_published = this.unix_trance_date(Integer.parseInt(Company[3]));
 		this.published = Integer.parseInt(Company[3]); // 기업채용개시일
+		this.string_deadline_date =  this.unix_trance_date(Integer.parseInt(Company[6]));
 		this.deadline_date = Integer.parseInt(Company[6]);//마감일
 		this.Job_name = Company[8]; //기업명
 		this.in_Jobs = Company[9] + Company[10] + Company[11]; //채용명
 		super.Find_job(this.in_Jobs);
 	}
+	
+	String unix_trance_date(int unix_time) {
+		long unixTime = (long)unix_time * 1000;
+		DateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date trance_date = new Date(unixTime);
+		return sdFormat.format(trance_date);
+	}
+	
 }
 
 class Use_Jobkorea extends Company_Data{
 	Use_Jobkorea(){}
 	int i = 0;
+	DateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd");
+	Date nowDate = new Date();
 	//잡코리아용 구문해석기
 	Use_Jobkorea(String[] Company){
 		this.Job_name = Company[0]; //기업명
@@ -67,7 +82,9 @@ class Use_Jobkorea extends Company_Data{
 			//특정 문자열에 요일이 있을 경우 15을 추가하여 년월일 형태로 정수형 변수에 추가
 			if(Company[i].contains("(월)")||Company[i].contains("(화)")||Company[i].contains("(수)")||Company[i].contains("(목)")
 					||Company[i].contains("(금)")||Company[i].contains("(토)")||Company[i].contains("(일)")){
-				this.deadline_date = Integer.parseInt("15"+Company[i].substring(0,2)+Company[i].substring(3,5));
+				this.string_published = sdFormat.format(nowDate);
+				this.string_deadline_date = "2015"+"-"+Company[i].substring(0,2)+"-"+Company[i].substring(3,5);
+				this.deadline_date = Integer.parseInt("2015"+Company[i].substring(0,2)+Company[i].substring(3,5));
 			}
 		}
 	}
@@ -82,6 +99,7 @@ public class HTML_parser{
     	//사람인 API의 XML구문 추출
        Document SaramIN = Jsoup.connect("http://api.saramin.co.kr/job-search?published=2015-08-07&start=2&count=1000").get();
        Document job_korea = Jsoup.connect("http://m.jobkorea.co.kr/Starter/NI_List.asp").get();
+       
        
         //구문 해석을 위한 임시 변수정의
         String[] tmp_string;
@@ -142,7 +160,11 @@ public class HTML_parser{
     	}
     	
     	Send_DB Send_DB = new Send_DB();
+    	for(int i=0; i<Company_list.size(); i++)
+    		Send_DB = new Send_DB(Company_list.get(i));
     	
-    	Send_DB.SendDB();
-    	}  
+    	for(int i=0; i<Company_list_2.size(); i++)
+    		Send_DB = new Send_DB(Company_list_2.get(i));
+    	
+    	}
 }  
