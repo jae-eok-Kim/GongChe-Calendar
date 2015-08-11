@@ -23,9 +23,9 @@ public class Send_DB {
 			   Connection conn = DriverManager.getConnection(url, username, password);
 			   Statement stmt = conn.createStatement();
 			   
-			   String sql = "INSERT INTO gongche(job_name, company_url, published, deadline_data, occupations, in_Jobs)"
+			   String sql = "INSERT INTO gongche(job_name, company_url, published, deadline_data, occupations, in_Jobs, large_companies)"
 			   		+ " VALUES ('"+ Saramin_API.Job_name +"','"+Saramin_API.Company_url+"','"+ Saramin_API.string_published 
-			   		+"','"+ Saramin_API.string_deadline_date +"',"+ Saramin_API.Occupations +",'"+Saramin_API.in_Jobs+"')";
+			   		+"','"+ Saramin_API.string_deadline_date +"',"+ Saramin_API.Occupations +",'"+Saramin_API.in_Jobs+"',"+Saramin_API.large_companies+")";
 			   stmt.executeUpdate(sql);
 			  } catch (SQLException e) {
 			   // TODO Auto-generated catch block
@@ -48,9 +48,9 @@ public class Send_DB {
 			   Connection conn = DriverManager.getConnection(url, username, password);
 			   Statement stmt = conn.createStatement();
 			   
-			   String sql = "INSERT INTO gongche(job_name, company_url, published, deadline_data, occupations, in_Jobs)"
+			   String sql = "INSERT INTO gongche(job_name, company_url, published, deadline_data, occupations, in_Jobs, large_companies)"
 				   		+ " VALUES ('"+ Jobkorea.Job_name +"','"+Jobkorea.Company_url+"','"+ Jobkorea.string_published 
-				   		+"','"+ Jobkorea.string_deadline_date +"',"+ Jobkorea.Occupations +",'"+Jobkorea.in_Jobs+"')";
+				   		+"','"+ Jobkorea.string_deadline_date +"',"+ Jobkorea.Occupations +",'"+Jobkorea.in_Jobs+"',"+Jobkorea.large_companies+")";
 			   stmt.executeUpdate(sql);
 			  } catch (SQLException e) {
 			   // TODO Auto-generated catch block
