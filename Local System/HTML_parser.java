@@ -16,7 +16,7 @@ class Company_Data{
 	static final int Etc =0, IT = 1, Office = 2, Blue_collar = 3;
 	//직종분류 IT: 1, 사무직: 2, 생산직 : 3, 기타 : 0
 	
-	int Company_ID,published,deadline_date,Occupations;
+	int Company_ID,published,deadline_date,Occupations,large_companies;
 	//Company_ID : 문서번호, published : 계시일, deadline_data: 마감일, Occupations : 직종
 	String Company_url,Job_name,in_Jobs,string_published,string_deadline_date;
 	//Company_url : 주소, Job_name : 회사명, in_Jobs : 상세내용
@@ -30,9 +30,21 @@ class Company_Data{
 	}
 	//in_Jobs 의 구문을 분석하여 직종분류작업
 	void Find_job(String in_job){
-		if(in_job.contains("자바")||in_job.contains("서버")||in_job.contains("C")||in_job.contains("java")||in_job.contains("IT")) this.Occupations = IT;
-		else if(in_job.contains("사무직")||in_job.contains("회계")||in_job.contains("경리")||in_job.contains("분석")||in_job.contains("유통")||in_job.contains("디자인")) this.Occupations = Office;
-		else if(in_job.contains("생산직")||in_job.contains("공장")||in_job.contains("건설")) this.Occupations = Blue_collar;
+		if(in_job.contains("자바")||in_job.contains("서버")||in_job.contains("C")||in_job.contains("java")
+				||in_job.contains("IT")||in_job.contains("애니메이션")||in_job.contains("게임")
+				||in_job.contains("web")||in_job.contains("시스템")||in_job.contains("S/W")||in_job.contains("H/W")
+				||in_job.contains("네트워크")||in_job.contains("소프트웨어")) this.Occupations = IT;
+		
+		else if(in_job.contains("사무직")||in_job.contains("회계")||in_job.contains("경리")||
+				in_job.contains("분석")||in_job.contains("유통")||in_job.contains("디자인")
+				||in_job.contains("통역")||in_job.contains("영업")||in_job.contains("회계")
+				||in_job.contains("보험")) this.Occupations = Office;
+		
+		else if(in_job.contains("생산직")||in_job.contains("공장")||in_job.contains("건설")
+				||in_job.contains("기계")||in_job.contains("전기")||in_job.contains("배송")
+				||in_job.contains("식품")||in_job.contains("경비")||in_job.contains("품질")
+				) this.Occupations = Blue_collar;
+		
 		else Occupations = Etc;
 	}
 	//직종 출력
@@ -42,7 +54,17 @@ class Company_Data{
 		else if(Occupations == Blue_collar) return "생산직";
 		else return "기타직종";
 	}
-	
+	//대기업 분류 작업 0 = 일반, 1 = 대기업 2 = 기피직장(테스트)
+	void find_large_companies(String Job_name){
+		if(Job_name.contains("삼성")||Job_name.contains("현대")||Job_name.contains("기아")||Job_name.contains("엘지")||Job_name.contains("한화")||
+				Job_name.contains("lg")||Job_name.contains("sk")||Job_name.contains("안랩")||Job_name.contains("농협")
+				||Job_name.contains("ibk")||Job_name.contains("국민")||Job_name.contains("신한")||Job_name.contains("우리")
+				||Job_name.contains("네이버")||Job_name.contains("네오위즈")||Job_name.contains("넷마블`")||Job_name.contains("다음")
+				||Job_name.contains("이랜드")||Job_name.contains("한샘")||Job_name.contains("쿠쿠")) this.large_companies=1;
+		
+		
+		else this.large_companies=0;
+	}
 }
 
 
@@ -57,9 +79,10 @@ class Use_Saramin_API extends Company_Data{
 		this.deadline_date = Integer.parseInt(Company[6]);//마감일
 		this.Job_name = Company[8]; //기업명
 		this.in_Jobs = Company[9] + Company[10] + Company[11]; //채용명
-		super.Find_job(this.in_Jobs);
+		super.Find_job(this.in_Jobs); //직종분류
+		super.find_large_companies(this.Job_name); //대기업여부 확인
 	}
-	
+	//사람인 api은 유닉스 시간 형태로 저장되어 별도의 변환이 필요
 	String unix_trance_date(int unix_time) {
 		long unixTime = (long)unix_time * 1000;
 		DateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -87,17 +110,25 @@ class Use_Jobkorea extends Company_Data{
 				this.deadline_date = Integer.parseInt("2015"+Company[i].substring(0,2)+Company[i].substring(3,5));
 			}
 		}
+		super.Find_job(this.in_Jobs); //직종분류
+		super.find_large_companies(this.Job_name); //대기업여부 확인
 	}
+	//잡코리아 웹주소 부여
 	void Set_Jobkorea_url(String url){
 		this.Company_url = url;
 	}
+	
 }
    
 public class HTML_parser{  
-    public static void main(String[] args) throws IOException {  
+    public static void main(String[] args) throws IOException { 
+    	
+    	DateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd");
+    	Date nowDate = new Date();
    
     	//사람인 API의 XML구문 추출
-       Document SaramIN = Jsoup.connect("http://api.saramin.co.kr/job-search?published=2015-08-07&start=2&count=1000").get();
+       Document SaramIN = Jsoup.connect("http://api.saramin.co.kr/job-search?published="+sdFormat.format(nowDate)+"&start=2&count=1000").get();
+       //모바일 잡코리아 웹페이지 호출
        Document job_korea = Jsoup.connect("http://m.jobkorea.co.kr/Starter/NI_List.asp").get();
        
        
