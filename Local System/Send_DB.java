@@ -1,5 +1,14 @@
-/*데이터 베이스 저장 및 통계분석용 텍스트 파일 저장 시스템
- * 사용 데이터베이스 시스템 : MYSQL*/
+/*  데이터 베이스 저장 및 통계분석용 텍스트 파일 저장 시스템
+ *  사용 데이터베이스 시스템 : MYSQL
+ * 
+ * 
+ *  Gongchemi version 3, Copyright (C) 2015년 <gadian88>
+ * 	Gongchemi 프로그램에는 제품에 대한 어떠한 형태의 보증도 제공되지 않습니다. 
+ * 	보다 자세한 사항은 http://korea.gnu.org/documents/copyleft/gpl.ko.html 에서 참고할 수 있습니다. 
+ * 	이 프로그램은 자유 소프트웨어입니다. 이 프로그램은 배포 규정을 만족시키는 조건하에서 자유롭게 재배포될 수 있습니다. 
+ * 	배포에 대한 규정들은  http://korea.gnu.org/documents/copyleft/gpl.ko.html 에서  참고할 수 있습니다. 
+ * 
+ *  */
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
@@ -7,6 +16,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
 
 
 public class Send_DB {
@@ -32,10 +43,15 @@ public class Send_DB {
 			   String sql = "INSERT INTO gongche(job_name, company_url, published, deadline_data, occupations, in_Jobs, large_companies)"
 			   		+ " VALUES ('"+ Saramin_API.Job_name +"','"+Saramin_API.Company_url+"','"+ Saramin_API.string_published 
 			   		+"','"+ Saramin_API.string_deadline_date +"',"+ Saramin_API.Occupations +",'"+Saramin_API.in_Jobs+"',"+Saramin_API.large_companies+")";
-			   stmt.executeUpdate(sql);
+			   try{
+				   stmt.executeUpdate(sql);
+			   }
+			   catch(MySQLSyntaxErrorException e){
+			//	   e.printStackTrace();
+			   }
 			  } catch (SQLException e) {
 			   // TODO Auto-generated catch block
-			   e.printStackTrace();
+			 //  e.printStackTrace();
 			  }finally{
 					try{
 						if(stmt!=null)
@@ -70,7 +86,7 @@ public class Send_DB {
 			   stmt.executeUpdate(sql);
 			  } catch (SQLException e) {
 			   // TODO Auto-generated catch block
-			   e.printStackTrace();
+			  // e.printStackTrace();
 			  }finally{
 					try{
 						if(stmt!=null)
@@ -90,7 +106,7 @@ public class Send_DB {
 			   Class.forName(MYSQL);
 			  } catch (ClassNotFoundException e) {
 			   // TODO Auto-generated catch block
-			   e.printStackTrace();
+			//   e.printStackTrace();
 			  }
 
 			  String url = LOCAL_HOST+"gongche"+"?autoReconnect=true";
@@ -104,7 +120,7 @@ public class Send_DB {
 			   stmt.executeUpdate(sql);
 			  } catch (SQLException e) {
 			   // TODO Auto-generated catch block
-			   e.printStackTrace();
+			 //  e.printStackTrace();
 			  }finally{
 					try{
 						if(stmt!=null)
