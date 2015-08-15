@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost:3306
--- 생성 시간: 15-08-10 17:50
+-- 생성 시간: 15-08-15 02:43
 -- 서버 버전: 5.6.26
 -- PHP 버전: 5.5.28
 
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `gongche` (
   `occupations` int(11) NOT NULL DEFAULT '0',
   `in_Jobs` varchar(255) NOT NULL,
   `large_companies` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=125 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=43237 DEFAULT CHARSET=utf8;
 
 --
 -- 덤프된 테이블의 인덱스
@@ -56,7 +56,7 @@ ALTER TABLE `gongche`
 -- 테이블의 AUTO_INCREMENT `gongche`
 --
 ALTER TABLE `gongche`
-  MODIFY `company_ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=125;
+  MODIFY `company_ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=43237;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
