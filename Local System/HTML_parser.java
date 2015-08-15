@@ -1,6 +1,15 @@
 	/* 공채일정을 위한 HTML 파싱 시스템
 	 * 목적 : 사람인 잡코리아 등의 사이트 내에서 구문을 해석하고 이를 분류한뒤 데이터베이스에 저장
 	 * 필요한 외부 라이브러리 : 자바 HTML 파서 jsoup (http://jsoup.org/) 자바 DBMS 라이브러리 mysql-connector-java-5.0.8-bin
+	 * 
+	 *  Gongchemi version 3, Copyright (C) 2015년 <gadian88>
+	 * 	Gongchemi 프로그램에는 제품에 대한 어떠한 형태의 보증도 제공되지 않습니다. 
+	 * 	보다 자세한 사항은 http://korea.gnu.org/documents/copyleft/gpl.ko.html 에서 참고할 수 있습니다. 
+	 * 	이 프로그램은 자유 소프트웨어입니다. 이 프로그램은 배포 규정을 만족시키는 조건하에서 자유롭게 재배포될 수 있습니다. 
+	 * 	배포에 대한 규정들은  http://korea.gnu.org/documents/copyleft/gpl.ko.html 에서  참고할 수 있습니다.
+	 * 
+	 * 
+	 * 
 	 * */
 import java.io.BufferedReader;
 import java.io.File;
@@ -260,7 +269,12 @@ public class HTML_parser{
 					string_published[i] = YEAR+"-"+e.text().substring(0,2)+"-"+e.text().substring(3,5);
 					published[i] = Integer.parseInt(YEAR+e.text().substring(0,2)+e.text().substring(3,5));
 				}
-				catch(IndexOutOfBoundsException e1){
+				catch(NumberFormatException e1){
+					string_published[i] = sdFormat.format(nowDate);
+					published[i] = Integer.parseInt(sdFormat2.format(nowDate));
+				}
+				catch (StringIndexOutOfBoundsException e2) {
+					// TODO: handle exception
 					string_published[i] = sdFormat.format(nowDate);
 					published[i] = Integer.parseInt(sdFormat2.format(nowDate));
 				}
@@ -300,22 +314,52 @@ public class HTML_parser{
 		return alldate;
 	}
 	
-    public static void main(String[] args) throws IOException { 
+	
+	//사람인 전용 구문 해석기
+	static void put_saramin(ArrayList<Use_Saramin_API> saramin, int page) throws IOException{
+		
+		
+		
+		
+		Document SaramIN = Jsoup.connect("http://api.saramin.co.kr/job-search?bbs_gb=1&"+"start=" + page + "&count=110").get();
+		
+		
+		 String[] tmp_string;
+		 //XML의 데이터 추출 : job 
+        //API에서는 job 태그로 각 기업정보를 저장하고 있음
+        Elements SaramIN_titles = SaramIN.select("job");  
+        //추출한 데이의 전체 내용 출력
+        for(Element e: SaramIN_titles){ 
+            System.out.println("text: " +e.text());  
+        }
+        
+        
+        
+        //클래스를 통한 데이터 지정
+        for(Element e: SaramIN_titles){
+        	tmp_string = e.text().split(" ");
+        	saramin.add(new Use_Saramin_API(tmp_string));
+        	
+        	
+        }
+        
+
+		
+	}
+	
+    public static void main(String[] args) throws IOException, InterruptedException { 
     	
-    	DateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd");
-    	Date nowDate = new Date();
+    	//DateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd");
+    	//Date nowDate = new Date();
    
-    	//사람인 API의 XML구문 추출
-       Document SaramIN = Jsoup.connect("http://api.saramin.co.kr/job-search?start=2&count=1000").get();
+
        //모바일 잡코리아 웹페이지 호출
        Document job_korea = Jsoup.connect("http://m.jobkorea.co.kr/Starter/NI_List.asp").get();
        
        
 
        
-       
-       String all_data = "text ";
-   		//채용내용 전체 저장
+
        
         //구문 해석을 위한 임시 변수정의
         String[] tmp_string;
@@ -328,11 +372,14 @@ public class HTML_parser{
         
         ArrayList<String> tmp_Array = new ArrayList<String>();
         
-        for(int i =2; i<20;i++)
-        	all_data = all_data + Put_Incruit(Company_list_3,i);
-
+        //잡코리아 저장
+        for(int i =2; i<50;i++)
+        	Put_Incruit(Company_list_3,i);
+        //사람인 저장
+        for(int i =1; i<15;i++)
+        	put_saramin(Company_list,i);
         
-        
+       /*
        //XML의 데이터 추출 : job 
         //API에서는 job 태그로 각 기업정보를 저장하고 있음
         Elements SaramIN_titles = SaramIN.select("job");  
@@ -352,13 +399,12 @@ public class HTML_parser{
         		System.out.println(Company_list.get(i));
         		all_data = all_data + Company_list.get(i).in_Jobs + " \n";
         	}
-        }
+        }*/
         
         
         Elements job_korea_titles = job_korea.select("ul.boothEvenOdd li");
         for(Element e: job_korea_titles){
         	tmp_string = e.text().split(" ");
-        	all_data = all_data + e.text() + "\n";
         	Company_list_2.add(new Use_Jobkorea(tmp_string));
         	/* 잡코리아 사이트에서 채용정보의 CSS 디자인 구문을 참고하여 boothEvenOdd 클라스의 구문이 있는 전체내용 저장
         	 * 
@@ -378,10 +424,16 @@ public class HTML_parser{
      		   tmp_Array.add(l.attr("abs:href"));
      	   }
          }
+        
         //기업 사이트수에 맞게 반복문 제어후 클래스에 삽입
         for(int i=0; i<Company_list_2.size()&&i<tmp_Array.size() ; i++){
         		Company_list_2.get(i).Set_Jobkorea_url(tmp_Array.get(i));
         }
+        
+      //사람인에 저장된 내용 출력
+    	for(int i=0; i<Company_list.size(); i++){
+    		System.out.println(Company_list.get(i));
+    	}
        //잡코리아에 저장된 내용 출력
     	for(int i=0; i<Company_list_2.size(); i++){
     		System.out.println(Company_list_2.get(i));
@@ -390,21 +442,29 @@ public class HTML_parser{
     	for(int i=0; i<Company_list_3.size(); i++){
     		System.out.println(Company_list_3.get(i));
     	}
+    	
     	Send_DB Send_DB = new Send_DB();
     	
     	Send_DB.DB_Garbage_Collecter(false);
+    	//데이터 베이스내의 필요없는 데이터를 청소하는 함수
+    	//true: 선택적 청소 false: 전체 청소 
     	
+
     	for(int i=0; i<Company_list.size(); i++)
     		Send_DB = new Send_DB(Company_list.get(i));
     	for(int i=0; i<Company_list_2.size(); i++)
     		Send_DB = new Send_DB(Company_list_2.get(i));
     	for(int i=0; i<Company_list_3.size(); i++)
     		Send_DB = new Send_DB(Company_list_3.get(i));
-    	//System.out.println(all_data);
+    		
+
+
     	
     	
-    	Send_DB.send_all_data_DB(all_data, sdFormat.format(nowDate));
-    	
+    	//Send_DB.send_all_data_DB(all_data, sdFormat.format(nowDate)); /*구문 해석용 덤프파일 저장*/
+    	Send_DB.DB_Garbage_Collecter(true);
+    	R_handler r_handler = new R_handler();
+    	r_handler.R_exe();
     	
     	}
 }  
