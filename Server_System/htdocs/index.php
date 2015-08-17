@@ -11,6 +11,9 @@ function classification($arg_1)
                break;
     case 3  : return "생산직";
                break;
+    case 4 : return "의료직";
+                 # code...
+           break;
     default    : return "기타";
                break;
              }
@@ -54,7 +57,7 @@ function put_date($arg_1){
   </head>
   <body>
     
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
@@ -63,7 +66,7 @@ function put_date($arg_1){
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">GongcheME!</a>
+      <a class="navbar-brand" href="index.php">GongcheME!</a>
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
@@ -75,10 +78,11 @@ function put_date($arg_1){
             <li><a href="http://www.saramin.co.kr/" target='_blank'>사람인</a></li>
             <li><a href="http://www.incruit.com/" target='_blank'>인쿠르드</a></li>
             <li class="divider"></li>
-            <li><a href="https://www.google.co.kr/search?q=%EB%B2%88%EC%97%AD&ie=utf-8&oe=utf-8&gws_rd=cr&ei=hwLJVaD9G8u-0ASBgpKIDw#newwindow=1&q=%EC%B7%A8%EC%97%85%EC%82%AC%EC%9D%B4%ED%8A%B8"  target='_blank'>더많은 취업사이트 알아보기</a></li>
+            <li><a href="https://www.google.co.kr/search?q=%EC%B7%A8%EC%97%85%EC%82%AC%EC%9D%B4%ED%8A%B8&ie=utf-8&oe=utf-8&gws_rd=cr&ei=fFnNVeLYKoG00gT_nYCQAQ"  target='_blank'>더많은 취업사이트 알아보기</a></li>
           </ul>
         </li>
         <li><a href="./ex_calendar.php" target='_blank'>달력보기</a></li>
+        <li><a href="./chart.php">Data Analysis</a></li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -109,8 +113,8 @@ function put_date($arg_1){
                         <th>번호</th>
                         <th>회사명</th>
                         <th>모집내용</th>
-                        <th>계시일</th>
-                        <th>마감일</th>
+                        <th>&nbsp; &nbsp;계시일&nbsp; &nbsp;</th>
+                        <th>&nbsp; &nbsp;마감일&nbsp; &nbsp;</th>
                         <th>직종</th>
                       </tr>
                     </thead>
@@ -136,8 +140,8 @@ function put_date($arg_1){
                         <th>번호</th>
                         <th>회사명</th>
                         <th>모집내용</th>
-                        <th>계시일자</th>
-                        <th>마감일자</th>
+                        <th>&nbsp; &nbsp;계시일자 &nbsp; &nbsp;</th>
+                        <th>&nbsp; &nbsp;마감일자 &nbsp; &nbsp;</th>
                         <th>직종</th>
                       </tr>
                     </tfoot>

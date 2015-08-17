@@ -11,7 +11,7 @@
 	echo "성공~!!!";
 	}
 
-	$result = mysqli_query($conn,"SELECT * FROM gongche WHERE large_companies = '1' ");
+	$result = mysqli_query($conn,"SELECT * FROM gongche ");
 	echo "<table border='1'> <tr> <th>필드1</th> <th>필드2</th> <th>필드3</th> <th>필드4</th> <th>필드5</th> <th>필드6</th> <th>필드7</th> <th>필드8</th><th>필드8</th><th>필드9</th><th>필드10</th></tr>";
 	$n = 1;
 	while($row = mysqli_fetch_array($result)){

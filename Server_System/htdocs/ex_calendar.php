@@ -1,6 +1,6 @@
 <?php  
   include_once('./common.php');
-  $result = mysqli_query($conn,"SELECT * FROM gongche WHERE large_companies = '1' ");
+  $result = mysqli_query($conn,"SELECT * FROM gongche WHERE in_Jobs like '%공채%' ");
 
 function set_color($arg_1)
 {
@@ -136,7 +136,7 @@ function set_color($arg_1)
           header: {
             left: 'prev,next today',
             center: 'title',
-            right: 'month,agendaWeek,agendaDay'
+            right: 'month'
           },
           buttonText: {
             today: 'today',
