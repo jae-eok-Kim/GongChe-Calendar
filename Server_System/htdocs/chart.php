@@ -23,7 +23,7 @@
     $row = mysqli_fetch_array($result_etc);
     $medical_num =  $row['COUNT(*)'];
     
-    //ì¼ìë³„ ê°¯ìˆ˜ ê³„ì‚°
+    //ÀÏÀÚº° °¹¼ö °è»ê
     
     $result_etc = mysqli_query($conn," SELECT COUNT(*) FROM  `gongche` WHERE `published` = CURDATE() ");
     $row = mysqli_fetch_array($result_etc);
@@ -56,7 +56,7 @@
     $row = mysqli_fetch_array($result_etc);
     $date[10] =  $row['COUNT(*)'];
 
-    //ë‹¨ì–´ ì¶œë ¥
+    //´Ü¾î Ãâ·Â
     $result_etc =  mysqli_query($conn,"SELECT `1st_word`,`2st_word`,`3st_word`,`4st_word`,`5st_word`,`6st_word`,`7st_word`,`8st_word`,`9st_word`,`10st_word` FROM `data_analysis` WHERE `analysis_date` = CURDATE() ");
     $row = mysqli_fetch_array($result_etc);
     $key_word[1] =  $row['1st_word'];
@@ -89,7 +89,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>ë°ì´í„° ë¶„ì„</title>
+    <title>µ¥ÀÌÅÍ ºĞ¼®</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="stylesheet" href="./css/bootstrap.css" media="screen">
@@ -128,26 +128,25 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
       <ul class="nav navbar-nav">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">ì·¨ì—…ì‚¬ì´íŠ¸ ë³´ê¸°<span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Ãë¾÷»çÀÌÆ® º¸±â<span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="http://www.jobkorea.co.kr/" target='_blank'>ì¡ì½”ë¦¬ì•„</a></li>
-            <li><a href="http://www.saramin.co.kr/" target='_blank'>ì‚¬ëŒì¸</a></li>
-            <li><a href="http://www.incruit.com/" target='_blank'>ì¸ì¿ ë¥´ë“œ</a></li>
+            <li><a href="http://www.jobkorea.co.kr/" target='_blank'>ÀâÄÚ¸®¾Æ</a></li>
+            <li><a href="http://www.saramin.co.kr/" target='_blank'>»ç¶÷ÀÎ</a></li>
+            <li><a href="http://www.incruit.com/" target='_blank'>ÀÎÄí¸£µå</a></li>
             <li class="divider"></li>
-            <li><a href="https://www.google.co.kr/search?q=%EC%B7%A8%EC%97%85%EC%82%AC%EC%9D%B4%ED%8A%B8&ie=utf-8&oe=utf-8&gws_rd=cr&ei=fFnNVeLYKoG00gT_nYCQAQ"  target='_blank'>ë”ë§ì€ ì·¨ì—…ì‚¬ì´íŠ¸ ì•Œì•„ë³´ê¸°</a></li>
+            <li><a href="https://www.google.co.kr/search?q=%EC%B7%A8%EC%97%85%EC%82%AC%EC%9D%B4%ED%8A%B8&ie=utf-8&oe=utf-8&gws_rd=cr&ei=fFnNVeLYKoG00gT_nYCQAQ"  target='_blank'>´õ¸¹Àº Ãë¾÷»çÀÌÆ® ¾Ë¾Æº¸±â</a></li>
           </ul>
         </li>
-        <li><a href="./ex_calendar.php" target='_blank'>ë‹¬ë ¥ë³´ê¸°</a></li>
+        <li><a href="./ex_calendar.php" target='_blank'>´Ş·Âº¸±â</a></li>
         <li><a href="./chart.php">Data Analysis</a></li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Team ì¤€ë˜ì™€ ì•„ì´ë“¤</a></li>
+        <li><a href="#">Team ÁØ·¡¿Í ¾ÆÀÌµé</a></li>
       </ul>
     </div>
   </div>
 </nav>
-    
     
 <!-- Main content -->
         <section class="content">
@@ -155,26 +154,28 @@
 
           <div class="row">
 
+            
 
-            <div class="col-md-6">
+
+            <div class="col-md-6"><!-- .col (LEFT) -->
               <!-- DONUT CHART -->
               <div class="box box-danger">
                 <div class="box-header with-border">
-                  <h3 class="box-title">ì§ì¢… í†µê³„</h3>
+                  <h3 class="box-title">Á÷Á¾ Åë°è</h3>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                   </div>
                 </div>
                 <div class="box-body">
-                    <canvas id="pieChart" style="height:300px"></canvas>
+                    <canvas id="pieChart" style="height:150px"></canvas>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
 
                <!-- BAR CHART -->
               <div class="box box-success">
                 <div class="box-header with-border">
-                  <h3 class="box-title">ì„ í˜¸í•˜ëŠ” ë‹¨ì–´</h3>
+                  <h3 class="box-title">¼±È£ÇÏ´Â ´Ü¾î</h3>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -182,7 +183,7 @@
                 </div>
                 <div class="box-body">
                   <div class="chart">
-                    <canvas id="barChart" style="height:300px"></canvas>
+                    <canvas id="barChart" style="height:170px"></canvas>
                   </div>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
@@ -190,12 +191,12 @@
 
             </div><!-- /.col (LEFT) -->
 
-
+            <!-- /.col (RIGHT) -->
             <div class="col-md-6">
                             <!-- BAR CHART -->
               <div class="box box-success">
                 <div class="box-header with-border">
-                  <h3 class="box-title">ì˜¤ëŠ˜ì˜ í‚¤ì›Œë“œ</h3>
+                  <h3 class="box-title">¿À´ÃÀÇ Å°¿öµå</h3>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -203,18 +204,20 @@
                 </div>
                 <div class="box-body" align="center">
 
-                    <img src= <?php echo "'./img/img_".date("Y-m-d").".png'";?> width=auto, height=700 ></img>
+                    <img src= <?php echo "'./img/img_".date("Y-m-d").".png'";?> style="max-width: 100%; height: auto;"></img>
 
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
-            </div><!-- /.col (LEFT) -->
+            </div><!-- /.col (RIGHT) -->
+
+            
 
 
             <div class="col-md-12">
               <!-- LINE CHART -->
               <div class="box box-info">
                 <div class="box-header with-border">
-                  <h3 class="box-title">ì¼ë³„ ë°ì´í„° ë³€í™”ìœ¨</h3>
+                  <h3 class="box-title">ÀÏº° µ¥ÀÌÅÍ º¯È­À²</h3>
                   <div class="box-tools pull-right">
                     <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -280,31 +283,31 @@
             value: <?php echo $etc_num; ?>,
             color: '#f56954',
             highlight: '#f56954',
-            label: 'ê¸°íƒ€ ì§ì¢…'
+            label: '±âÅ¸ Á÷Á¾'
           },
           {
             value: <?php echo $it_num; ?>,
             color: '#00a65a',
             highlight: '#00a65a',
-            label: 'IT ë¶€ì„œ'
+            label: 'IT ºÎ¼­'
           },
           {
             value: <?php echo $office_num; ?>,
             color: '#f39c12',
             highlight: '#f39c12',
-            label: 'ì‚¬ë¬´ì§'
+            label: '»ç¹«Á÷'
           },
           {
             value: <?php echo $blue_collar_num; ?>,
             color: '#00c0ef',
             highlight: '#00c0ef',
-            label: 'ìƒì‚°ì§'
+            label: '»ı»êÁ÷'
           },
           {
             value: <?php echo $medical_num; ?>,
             color: '#3c8dbc',
             highlight: '#3c8dbc',
-            label: 'ì˜ë£Œì—…'
+            label: 'ÀÇ·á¾÷'
           },
         ];
         var pieOptions = {
@@ -479,10 +482,18 @@
     <script src="js/Chart.min.js"></script>
     <!-- FastClick -->
     <script src="js/fastclick.min.js"></script>
+    <!-- SlimScroll -->
+    <script src="./js/jquery.slimscroll.min.js"></script>
     <!-- AdminLTE App -->
     <script src="js/app.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="js/demo.js"></script>
     <!-- page script -->
+
+
+
+
+
+
   </body>
 </html>
